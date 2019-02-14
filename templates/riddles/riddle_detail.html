@@ -7,20 +7,38 @@
 {% block content %}
 
 <div>
-{{ object.content|safe }}
+    {{ object.content|safe }}
 </div>
 
 {% if not object.is_final %}
 <hr><br>
-<form enctype="multipart/form-data" method="post">
+<form enctype="multipart/form-data" method="post" onsubmit="return verifyAnswer()">
     {% csrf_token %}
     {{ form.non_field_errors }}
-    <div style="color:#dc3545">
+    <div id="error" style="color:#dc3545">
         {% for error in  form.answer.errors %}{{ error }}{% endfor %}
     </div>
-    {{ form.answer }}
+    <input type="text"
+           name="{{ form.answer.name }}"
+           {% if form.anwer.field.required %}required{% endif %}
+           maxlength="{{ form.answer.field.max_length }}"
+           id="{{ form.answer.id_for_label }}"
+           placeholder="{% trans "your answer" %}">
     <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
 </form>
-{% endif %}
 
+<script type="text/javascript">
+ function verifyAnswer() {
+     var field = document.getElementById("{{ form.answer.id_for_label }}");
+     var answer = field.value;
+     if (CryptoJS.SHA256(answer).toString(CryptoJS.enc.Hex) != "{{ object.answer_hash }}") {
+         field.value = "";
+         document.getElementById("error").innerText = '"' + answer + '" is incorrect';
+         return false;
+     } else {
+         return true;
+     }
+ }
+</script>
+{% endif %}
 {% endblock %}

@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 import uuid
+import hashlib
 
 class Riddle(models.Model):
 
@@ -25,6 +26,10 @@ class Riddle(models.Model):
     def clean(self):
         if (self.next is None and self.answer is not None) or (self.next is not None and self.answer is None):
             raise ValidationError(_("Either next and answer are defined or not."))
+
+    @property
+    def answer_hash(self):
+        return hashlib.sha256(self.answer.encode("utf-8")).hexdigest()
 
     class Meta:
         ordering = ["title",]
