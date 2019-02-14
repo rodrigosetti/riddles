@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
 ROOT_URLCONF = 'riddlechallenge.urls'
 
 TEMPLATES = [

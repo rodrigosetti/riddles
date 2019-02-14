@@ -29,7 +29,7 @@ class Riddle(models.Model):
 
     @property
     def answer_hash(self):
-        return hashlib.sha256(self.answer.encode("utf-8")).hexdigest()
+        return hashlib.sha256(self.answer.strip().upper().encode("utf-8")).hexdigest()
 
     class Meta:
         ordering = ["title",]

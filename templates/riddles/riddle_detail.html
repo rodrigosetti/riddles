@@ -31,7 +31,8 @@
  function verifyAnswer() {
      var field = document.getElementById("{{ form.answer.id_for_label }}");
      var answer = field.value;
-     if (CryptoJS.SHA256(answer).toString(CryptoJS.enc.Hex) != "{{ object.answer_hash }}") {
+     if (CryptoJS.SHA256(answer.trim().toUpperCase()).toString(CryptoJS.enc.Hex)
+            != "{{ object.answer_hash }}") {
          field.value = "";
          document.getElementById("error").innerText = '"' + answer + '" is incorrect';
          return false;
