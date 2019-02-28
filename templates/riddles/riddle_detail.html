@@ -16,14 +16,15 @@
     {% csrf_token %}
     {{ form.non_field_errors }}
     <div id="error" style="color:#dc3545">
-        {% for error in  form.answer.errors %}{{ error }}{% endfor %}
+        {% for error in form.answer.errors %}{{ error }}{% endfor %}
     </div>
     <input type="text"
+           autocomplete="off" 
            name="{{ form.answer.name }}"
            {% if form.anwer.field.required %}required{% endif %}
            maxlength="{{ form.answer.field.max_length }}"
            id="{{ form.answer.id_for_label }}"
-           placeholder="{% trans "your answer" %}">
+           placeholder="{{ form.answer.help_text }}">
     <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
 </form>
 
@@ -34,7 +35,7 @@
      if (CryptoJS.SHA256(answer.trim().toUpperCase()).toString(CryptoJS.enc.Hex)
             != "{{ object.answer_hash }}") {
          field.value = "";
-         document.getElementById("error").innerText = '"' + answer + '" is incorrect';
+         document.getElementById("error").innerText = '"' + answer + '" {% trans "is incorrect" %}';
          return false;
      } else {
          return true;
